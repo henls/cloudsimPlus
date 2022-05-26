@@ -158,13 +158,13 @@ public class VerticalVmCpuScalingExample {
      * @param evt information about the event happened (that for this Listener is just the simulation time)
      */
     private void onClockTickListener(EventInfo evt) {
-        vmList.forEach(vm ->
+        /*vmList.forEach(vm ->
             System.out.printf(
                 "\t\tTime %6.1f: Vm %d CPU Usage: %6.2f%% (%2d vCPUs. Running Cloudlets: #%d). RAM usage: %.2f%% (%d MB)%n",
                 evt.getTime(), vm.getId(), vm.getCpuPercentUtilization()*100.0, vm.getNumberOfPes(),
                 vm.getCloudletScheduler().getCloudletExecList().size(),
                 vm.getRam().getPercentUtilization()*100, vm.getRam().getAllocatedResource())
-        );
+        );*/
     }
 
     private void printSimulationResults() {
@@ -281,7 +281,8 @@ public class VerticalVmCpuScalingExample {
          * using the available ones such as the {@link ResourceScalingGradual}
          * or {@link ResourceScalingInstantaneous}.
          */
-        verticalCpuScaling.setResourceScaling(vs -> 2*vs.getScalingFactor()*vs.getAllocatedResource());
+        //verticalCpuScaling.setResourceScaling(vs -> 2*vs.getScalingFactor()*vs.getAllocatedResource());
+        verticalCpuScaling.setResourceScaling(vs -> 1);
 
         verticalCpuScaling.setLowerThresholdFunction(this::lowerCpuUtilizationThreshold);
         verticalCpuScaling.setUpperThresholdFunction(this::upperCpuUtilizationThreshold);
