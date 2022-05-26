@@ -59,7 +59,7 @@ public class VerticalVmScalingSimple extends VerticalVmScalingAbstract {
      */
     double lastMipsUsage = 1.;
     double lastPeUsage= 1.;
-    double lastTime = 0.;
+    int lastTime = 0;
     public VerticalVmScalingSimple(final Class<? extends ResourceManageable> resourceClassToScale, final double scalingFactor){
         super(resourceClassToScale, new ResourceScalingGradual(), scalingFactor);
     }
@@ -68,13 +68,13 @@ public class VerticalVmScalingSimple extends VerticalVmScalingAbstract {
     public boolean isVmUnderloaded() {
         double cpuPercentage = getVm().getCpuPercentUtilization();
         int runningCloudlet = getVm().getCloudletScheduler().getCloudletExecList().size();
-        if (lastTime != getVm().getSimulation().clock()){
+        if (lastTime != (int) getVm().getSimulation().clock()){
         System.out.printf(
                 "\t\tTime %6.1f: Vm %d CPU Usage: %6.2f%% (%2d vCPUs. Running Cloudlets: #%d). RAM usage: %.2f%% (%d MB)%n",
                 getVm().getSimulation().clock(), getVm().getId(), getVm().getCpuPercentUtilization()*100.0, getVm().getNumberOfPes(),
                 getVm().getCloudletScheduler().getCloudletExecList().size(),
                 getVm().getRam().getPercentUtilization()*100, getVm().getRam().getAllocatedResource());
-                lastTime = getVm().getSimulation().clock();
+                lastTime = (int) getVm().getSimulation().clock();
         }
         
         double latestPercentage = lastMipsUsage * 1 / lastPeUsage * getPePercentage();

@@ -107,7 +107,7 @@ public class VerticalVmCpuScalingExample {
 
     private static final int HOST_PES = 32;
     private static final int VMS = 1;
-    private static final int VM_PES = 1;
+    private static final int VM_PES = 14;
     private static final int VM_RAM = 1200;
     private final CloudSim simulation;
     private DatacenterBroker broker0;
