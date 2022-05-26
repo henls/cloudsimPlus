@@ -107,7 +107,7 @@ public class VerticalVmCpuScalingExample {
 
     private static final int HOST_PES = 32;
     private static final int VMS = 1;
-    private static final int VM_PES = 14;
+    private static final int VM_PES = 1;
     private static final int VM_RAM = 1200;
     private final CloudSim simulation;
     private DatacenterBroker broker0;
@@ -380,7 +380,7 @@ public class VerticalVmCpuScalingExample {
         Then it is preempted to enable other Cloudlets to use such a VM PE.
          */
         final UtilizationModel utilizationCpu = new UtilizationModelFull();
-
+        //final UtilizationModel utilizationCpu = new UtilizationModelDynamic(0.5);
         /**
          * Since BW e RAM are shared resources that don't enable preemption,
          * two Cloudlets can't use the same portion of such resources at the same time

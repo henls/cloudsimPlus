@@ -56,17 +56,49 @@ public class VerticalVmScalingSimple extends VerticalVmScalingAbstract {
      *                      doubling its capacity.
      * @see VerticalVmScaling#setResourceScaling(ResourceScaling)
      */
+    double lastMipsUsage = 1.;
+    double lastPeUsage= 1.;
     public VerticalVmScalingSimple(final Class<? extends ResourceManageable> resourceClassToScale, final double scalingFactor){
         super(resourceClassToScale, new ResourceScalingGradual(), scalingFactor);
     }
 
     @Override
     public boolean isVmUnderloaded() {
-        return getResource().getPercentUtilization() < getLowerThresholdFunction().apply(getVm());
+        double cpuPercentage = getVm().getCpuPercentUtilization();
+        int runningCloudlet = getVm().getCloudletScheduler().getCloudletExecList().size();
+        /*System.out.printf(
+                "\t\tTime %6.1f: Vm %d CPU Usage: %6.2f%% (%2d vCPUs. Running Cloudlets: #%d). RAM usage: %.2f%% (%d MB)%n",
+                getVm().getSimulation().clock(), getVm().getId(), getVm().getCpuPercentUtilization()*100.0, getVm().getNumberOfPes(),
+                getVm().getCloudletScheduler().getCloudletExecList().size(),
+                getVm().getRam().getPercentUtilization()*100, getVm().getRam().getAllocatedResource());*/
+        
+        
+        double latestPercentage = lastMipsUsage * 1 / lastPeUsage * getResource().getPercentUtilization();
+        if (cpuPercentage != 0. && runningCloudlet != 0){
+            lastMipsUsage = cpuPercentage;
+        } 
+        lastPeUsage = getResource().getPercentUtilization();
+        return latestPercentage < getUpperThresholdFunction().apply(getVm());
+        //return getResource().getPercentUtilization() < getLowerThresholdFunction().apply(getVm());
+
     }
 
     @Override
     public boolean isVmOverloaded() {
-        return getResource().getPercentUtilization() > getUpperThresholdFunction().apply(getVm());
+        double cpuPercentage = getVm().getCpuPercentUtilization();
+        int runningCloudlet = getVm().getCloudletScheduler().getCloudletExecList().size();
+        /*System.out.printf(
+                "\t\tTime %6.1f: Vm %d CPU Usage: %6.2f%% (%2d vCPUs. Running Cloudlets: #%d). RAM usage: %.2f%% (%d MB)%n",
+                getVm().getSimulation().clock(), getVm().getId(), getVm().getCpuPercentUtilization()*100.0, getVm().getNumberOfPes(),
+                getVm().getCloudletScheduler().getCloudletExecList().size(),
+                getVm().getRam().getPercentUtilization()*100, getVm().getRam().getAllocatedResource());*/
+        
+        
+        double latestPercentage = lastMipsUsage * 1 / lastPeUsage * getResource().getPercentUtilization();
+        if (cpuPercentage != 0. && runningCloudlet != 0){
+            lastMipsUsage = cpuPercentage;
+        } 
+        lastPeUsage = getResource().getPercentUtilization();
+        return latestPercentage > getUpperThresholdFunction().apply(getVm());
     }
 }
